@@ -6,7 +6,11 @@ public class Program
     public static void Main(string[] args)
     {
         ExcelWrapper a = new ExcelWrapper();
-        a.Test(new KaganTestResult("123OMN", DateTime.UtcNow)
+
+        var b = new FileWrapper();
+        var test = b.LoadTest();
+
+        a.SaveTestResult(new KaganTestResult("123OMN", DateTime.UtcNow)
         { 
             StepResults = new List<TestStepResult>
             { 
@@ -19,7 +23,7 @@ public class Program
             }
         });
 
-        a.Test(new KaganTestResult("124OMN", DateTime.UtcNow)
+        a.SaveTestResult(new KaganTestResult("124OMN", DateTime.UtcNow)
         {
             StepResults = new List<TestStepResult>
             {
@@ -32,7 +36,7 @@ public class Program
             }
         });
 
-        a.Test(new KaganTestResult("125OMN", DateTime.UtcNow)
+        a.SaveTestResult(new KaganTestResult("125OMN", DateTime.UtcNow)
         {
             StepResults = new List<TestStepResult>
             {

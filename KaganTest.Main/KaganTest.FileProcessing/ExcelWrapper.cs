@@ -31,7 +31,6 @@ namespace KaganTest.FileProcessing
 
     public class ExcelWrapper
     {
-
         private static Dictionary<int, string> ColumnConvertor = new Dictionary<int, string>
         {
             [0] = "A",
@@ -61,26 +60,27 @@ namespace KaganTest.FileProcessing
             [24] = "AA",
             [25] = "AB",
             [26] = "AC",
-            [27] = "AD",
+            [27] = "AD"
         };
+
+        private const int START_ROW_INDEX = 2;
+        private const int COLUMN_START_INDEX = 5;
+        private const string FILE_LOCATION = "..\\KaganTestResult.xlsx";
 
         private Worksheet _worksheet;
         private Workbook _workbook;
-        private const int ROW_START_INDEX = 2;
-        private const int COLUMN_START_INDEX = 5;
-        private int _lastUserColumnIndex = -1;
+        
         private int _nextUserColumnIndex => _lastUserColumnIndex++;
+        private int _lastUserColumnIndex = -1;
 
         public ExcelWrapper()
         {
-            _workbook = new Workbook();
+            _workbook = new Workbook(FILE_LOCATION);
             _worksheet = _workbook.Worksheets[0];
         }
 
-
-        public void Test(KaganTestResult result)
+        public void SaveTestResult(KaganTestResult result)
         {
-#warning get this from excel!
             var userColumnIndex = GetUserColumnIndex();
 
             SaveResultsAnswer(userColumnIndex, result);
@@ -93,7 +93,7 @@ namespace KaganTest.FileProcessing
             {
                 for (int i = COLUMN_START_INDEX; i < 1000; i++)
                 {
-                    var value = _worksheet.Cells[$"{ColumnConvertor[ROW_START_INDEX]}{i}"].StringValue;
+                    var value = _worksheet.Cells[$"{ColumnConvertor[START_ROW_INDEX]}{i}"].StringValue;
 
                     if (string.IsNullOrEmpty(value))
                     {
@@ -110,29 +110,44 @@ namespace KaganTest.FileProcessing
             } 
         }
 
-        private void SaveResultsAnswer(int userColumnIndex, KaganTestResult result)
+        private void SaveResultsAnswer(int secondIndex, KaganTestResult result)
         {
-            _worksheet.Cells[$"{ColumnConvertor[ROW_START_INDEX]}{userColumnIndex}"].PutValue(result.UserId);
+            _worksheet.Cells[$"{ColumnConvertor[START_ROW_INDEX]}{secondIndex}"].PutValue(result.UserId);
 
             foreach (var stepResult in result.StepResults)
             {
-                _worksheet.Cells[$"{ColumnConvertor[ROW_START_INDEX + stepResult.StepNumber]}{userColumnIndex}"].PutValue(stepResult.IsCorrect ? "Верно" : "Неверно");
+                var index = GetCellIndex(START_ROW_INDEX + stepResult.StepNumber, secondIndex);
+
+                _worksheet.Cells[index].PutValue(stepResult.IsCorrect ? "Верно" : "Неверно");
             }
-            //Save the Excel file.
-            _workbook.Save($"..\\KaganTestResult.xlsx", SaveFormat.Xlsx);
+
+            Save();
         }
 
-        private void SaveElapsedTime(int userColumnIndex, KaganTestResult result)
+        private void SaveElapsedTime(int secondIndex, KaganTestResult result)
         {
-            var startIndex = ROW_START_INDEX + ROW_START_INDEX + result.StepResults.Count;
-            _worksheet.Cells[$"{ColumnConvertor[startIndex]}{userColumnIndex}"].PutValue(result.UserId);
+            var startRowIndex = START_ROW_INDEX + START_ROW_INDEX + result.StepResults.Count;
+
+            _worksheet.Cells[$"{ColumnConvertor[startRowIndex]}{secondIndex}"].PutValue(result.UserId);
 
             foreach (var stepResult in result.StepResults)
             {
-                _worksheet.Cells[$"{ColumnConvertor[startIndex + stepResult.StepNumber]}{userColumnIndex}"].PutValue(stepResult.TimeElapsed.TotalSeconds);
+                var index = GetCellIndex(startRowIndex + stepResult.StepNumber, secondIndex);
+
+                _worksheet.Cells[index].PutValue(stepResult.TimeElapsed.TotalSeconds);
             }
-            //Save the Excel file.
-            _workbook.Save($"..\\KaganTestResult.xlsx", SaveFormat.Xlsx);
+
+            Save();
+        }
+
+        private string GetCellIndex(int firstIndex, int secondIndex)
+        { 
+            return $"{ColumnConvertor[firstIndex]}{secondIndex}";
+        }
+
+        private void Save()
+        { 
+            _workbook.Save(FILE_LOCATION, SaveFormat.Xlsx);
         }
     }
 }
