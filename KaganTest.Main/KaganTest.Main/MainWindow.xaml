@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KaganTest.Main"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Тест Кагана - Начало" Height="450" Width="800" WindowState="Maximized">
+    <Grid Height="434">
+        <GroupBox x:Name="___group1_" Header="" HorizontalAlignment="Center" Height="414" VerticalAlignment="Center" Width="780"/>
+        <Label Content="Введите ваш код:" HorizontalAlignment="Center" Margin="0,118,0,0" VerticalAlignment="Top" FontSize="32"/>
+        <TextBox HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="725" Height="40" FontSize="24"/>
+        <Button Content="Готово" HorizontalAlignment="Center" Margin="0,285,0,0" VerticalAlignment="Top" Height="37" Width="174" FontSize="16" Click="Button_Click"/>
 
     </Grid>
 </Window>

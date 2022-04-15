@@ -24,5 +24,12 @@ namespace KaganTest.Main
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ___group1_.Visibility = Visibility.Collapsed;
+            TestWindow tw = new TestWindow();
+            tw.Show();
+        }
     }
 }

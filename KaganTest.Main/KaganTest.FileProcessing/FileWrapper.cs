@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace KaganTest.FileProcessing
 {
@@ -18,7 +21,7 @@ namespace KaganTest.FileProcessing
 
     public class TestStepCollection
     {
-        public readonly List<TestStep> Steps;
+        public readonly List<TestStep> Answers;
         public readonly int Index;
         public readonly Uri RigthAnswerImagePath;
         public bool IsNeedToRecord;
@@ -26,7 +29,7 @@ namespace KaganTest.FileProcessing
         public TestStepCollection(int index, List<TestStep> steps, bool isNeedToRecord, Uri rigthAnswerImagePath)
         {
             Index = index;
-            Steps = steps;
+            Answers = steps;
             IsNeedToRecord = isNeedToRecord;
             RigthAnswerImagePath = rigthAnswerImagePath;
         }
